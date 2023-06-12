@@ -1,0 +1,205 @@
+problem statement :
+WAP to create anonymous class for mathematical operation such as add, subtract, multiply, divide based on an interface for operation.
+	Eg:
+	Interface MathOp{
+	Int operation(int x, int y);
+	}
+	MathOp add= new MathOp(){
+	Int operation(int x, int y){
+	Return x+y;
+	}
+	Add.operation(1,8) -> 9
+  
+  code :
+  package pkgDay6Exercise;
+
+//Exercise2Day6
+interface MathOp {
+    int operation(int x, int y);
+}
+
+public class AnonymousClass {
+    public static void main(String[] args) {
+        MathOp add = new MathOp() {
+            public int operation(int x, int y) {
+                return x + y;
+            }
+        };
+
+        MathOp subtract = new MathOp() {
+            public int operation(int x, int y) {
+                return x - y;
+            }
+        };
+
+        MathOp multiply = new MathOp() {
+            public int operation(int x, int y) {
+                return x * y;
+            }
+        };
+
+        MathOp divide = new MathOp() {
+            public int operation(int x, int y) {
+                if (y != 0) {
+                    return x / y;
+                } else {
+                    throw new ArithmeticException("Cannot divide by zero");
+                }
+            }
+        };
+
+        int result = add.operation(10, 80);
+        System.out.println("Addition: " + result);
+
+        result = subtract.operation(10, 9);
+        System.out.println("Subtraction: " + result);
+
+        result = multiply.operation(13, 14);
+        System.out.println("Multiplication: " + result);
+
+        result = divide.operation(100, 2);
+        System.out.println("Division: " + result);
+
+    }
+}
+------------------*-----------------------
+
+problem statement :
+WAP to create lambda for mathematical operation such as add, subtract, multiply, divide based on an interface for operation.
+	Eg:
+	Interface MathOp{
+	Int operation(int x, int y);
+	}
+	MathOp add= (x,y) -> x+y;
+	Add.operation(1,8) -> 9
+  code :
+  package pkgDay6Exercise;
+//Ex3 day6
+interface MathOp1 {
+	int operation(int x, int y);
+}
+
+public class LambdaClass {
+	public static void main(String[] args) {
+		MathOp1 add = (x, y) -> x + y;
+
+		MathOp1 subtract = (x, y) -> x - y;
+
+		MathOp1 multiply = (x, y) -> x * y;
+
+		MathOp1 divide = (x, y) -> {
+			if (y != 0) {
+				return x / y;
+			} else {
+				throw new ArithmeticException("Cannot divide by zero");
+			}
+		};
+
+		int result = add.operation(1, 8);
+		System.out.println("Addition: " + result);
+
+		result = subtract.operation(10, 5);
+		System.out.println("Subtraction: " + result);
+
+		result = multiply.operation(3, 4);
+		System.out.println("Multiplication: " + result);
+
+		result = divide.operation(10, 2);
+		System.out.println("Division: " + result);
+
+	}
+}
+--------*-----------------------
+problem statement 
+WAP to use FI : BiFunction<Integer, Integer,Integer> for  operations such as add, subtract, multiply, divide.
+	Eg:
+	BiFunction<Integer,Integer,Integer> add= (x,y) -> x+y;
+	Add.apply (1,8) -> 9
+  code :
+  package pkgDay6Exercise;
+//Ex 4 day6
+import java.util.function.BiFunction;
+
+public class BiFunctionalClass {
+	public static void main(String[] args) {
+		BiFunction<Integer, Integer, Integer> add = (x, y) -> x + y;
+
+		BiFunction<Integer, Integer, Integer> subtract = (x, y) -> x - y;
+
+		BiFunction<Integer, Integer, Integer> multiply = (x, y) -> x * y;
+
+		BiFunction<Integer, Integer, Integer> divide = (x, y) -> {
+			if (y != 0) {
+				return x / y;
+			} else {
+				throw new ArithmeticException("Cannot divide by zero");
+			}
+		};
+
+		int result = add.apply(11, 8);
+		System.out.println("Addition: " + result);
+
+		result = subtract.apply(100, 5);
+		System.out.println("Subtraction: " + result);
+
+		result = multiply.apply(30, 4);
+		System.out.println("Multiplication: " + result);
+
+		result = divide.apply(50, 2);
+		System.out.println("Division: " + result);
+
+	}
+}
+-----------------------*--------------------------
+Problem statement :
+Consider the list as:
+	List<Integer> li1 = Arrays.asList(1,2,13,47,5,6,13,2);
+	1. Print all odd numbers from the list. Use Stream API’s filter and forEach.
+	Print all the associated values along with it’s square from the list. Use Stream API’s peek, map, and forEach.
+  
+  code:
+  package pkgDay6Exercise;
+
+import java.util.Arrays;
+import java.util.List;
+
+public class StreamExerciseClass {
+    public static void main(String[] args) {
+        List<Integer> li1 = Arrays.asList(1, 2, 13, 47, 5, 6, 13, 2);
+
+        // Print all odd numbers from the list using filter and forEach
+        System.out.println("Odd numbers:");
+        li1.stream()
+                .filter(number -> number % 2 != 0)
+                .forEach(System.out::println);
+
+        // Print all the associated values along with their squares using peek, map, and forEach
+        System.out.println("Number - Square:");
+        li1.stream()
+                .peek(number -> System.out.print(number + " - "))
+                .map(number -> number * number)
+                .forEach(System.out::println);
+    }
+}
+------------------------*-----------------
+problem statement :
+From a List of string, print the count of empty strings using filter(), count().
+
+code :
+package pkgDay6Exercise;
+
+import java.util.Arrays;
+import java.util.List;
+
+public class Exercise6Class {
+    public static void main(String[] args) {
+        List<String> stringList = Arrays.asList("stream", "", "of", "", "Java", "","stream");
+
+        // Use filter() to get a stream of m strings and count() to count them
+        long count = stringList.stream()
+                .filter(str -> str.isEmpty())
+                .count();
+
+        System.out.println("Count of empty strings: " + count);
+    }
+}
