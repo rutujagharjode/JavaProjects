@@ -1,0 +1,175 @@
+//convert the class diagram 
+
+package pkgDay3;
+
+class ErpAgent {
+    private String name;
+    private String id;
+
+    public ErpAgent(String name, String id) {
+        this.name = name;
+        this.id = id;
+    }
+
+    public void displayInfo() {
+        System.out.println("Name: " + name);
+        System.out.println("ID: " + id);
+    }
+}
+
+class trainingAgent extends ErpAgent {
+    private int salesCount;
+
+    public trainingAgent(String name, String id, int salesCount) {
+        super(name, id);
+        this.salesCount = salesCount;
+    }
+
+    public void displaySalesCount() {
+        System.out.println("Sales Count: " + salesCount);
+    }
+}
+
+class authorizationAgnt extends ErpAgent {
+    private double balance;
+
+    public authorizationAgnt(String name, String id, double balance) {
+        super(name, id);
+        this.balance = balance;
+    }
+
+    public void displayBalance() {
+        System.out.println("Balance: " + balance);
+    }
+}
+
+class ipAgent extends ErpAgent {
+    private int quantity;
+
+    public ipAgent(String name, String id, int quantity) {
+        super(name, id);
+        this.quantity = quantity;
+    }
+
+    public void displayQuantity() {
+        System.out.println("Quantity: " + quantity);
+    }
+}
+
+class dcAgent extends ErpAgent {
+    private int employeesCount;
+
+    public dcAgent(String name, String id, int employeesCount) {
+        super(name, id);
+        this.employeesCount = employeesCount;
+    }
+
+    public void displayEmployeesCount() {
+        System.out.println("Employees Count: " + employeesCount);
+    }
+}
+
+class maintainanceAgent extends ErpAgent {
+    private int productionCount;
+
+    public maintainanceAgent(String name, String id, int productionCount) {
+        super(name, id);
+        this.productionCount = productionCount;
+    }
+
+    public void displayProductionCount() {
+        System.out.println("Production Count: " + productionCount);
+    }
+}
+
+class costAgent extends ErpAgent {
+    private double totalPurchaseAmount;
+
+    public costAgent(String name, String id, double totalPurchaseAmount) {
+        super(name, id);
+        this.totalPurchaseAmount = totalPurchaseAmount;
+    }
+
+    public void displayTotalPurchaseAmount() {
+        System.out.println("Total Purchase Amount: " + totalPurchaseAmount);
+    }
+}
+
+class erpSystem extends ErpAgent {
+    private String campaignName;
+
+    public erpSystem(String name, String id, String campaignName) {
+        super(name, id);
+        this.campaignName = campaignName;
+    }
+
+    public void displayCampaignName() {
+        System.out.println("Campaign Name: " + campaignName);
+    }
+}
+
+class systemAgent extends ErpAgent {
+    private String supportType;
+
+    public systemAgent(String name, String id, String supportType) {
+        super(name, id);
+        this.supportType = supportType;
+    }
+
+    public void displaySupportType() {
+        System.out.println("Support Type: " + supportType);
+    }
+}
+
+class developAgent extends ErpAgent {
+    private String dev;
+
+    public developAgent(String name, String id, String dev) {
+        super(name, id);
+        this.dev = dev;
+    }
+
+    public void displayDev() {
+        System.out.println("Dev: " + dev);
+    }
+}
+
+public class Day3 {
+    public static void main(String[] args) {
+        trainingAgent trainingAgent = new trainingAgent("Rohit", "1", 100);
+        trainingAgent.displayInfo();
+        trainingAgent.displaySalesCount();
+
+        authorizationAgnt authorizationAgnt = new authorizationAgnt("kaliya", "2", 500);
+        authorizationAgnt.displayInfo();
+        authorizationAgnt.displayBalance();
+
+        ipAgent ipAgent = new ipAgent("Chotabhim", "3", 500);
+        ipAgent.displayInfo();
+        ipAgent.displayQuantity();
+
+        dcAgent dcAgent = new dcAgent("jaggu", "4", 100);
+        dcAgent.displayInfo();
+        dcAgent.displayEmployeesCount();
+
+        maintainanceAgent maintainanceAgent = new maintainanceAgent("chhutki", "5", 200);
+        maintainanceAgent.displayInfo();
+        maintainanceAgent.displayProductionCount();
+
+        costAgent costAgent = new costAgent("roy", "6", 1000);
+        costAgent.displayInfo();
+        costAgent.displayTotalPurchaseAmount();
+
+        erpSystem erpSystem = new erpSystem("Ankita", "7", "Summer Sale");
+        erpSystem.displayInfo();
+        erpSystem.displayCampaignName();
+
+        systemAgent itAgent = new systemAgent("Gunjan", "8", "Software Support");
+        itAgent.displayInfo();
+        itAgent.displaySupportType();
+
+        developAgent developAgent = new developAgent("Rakesh", "9", "Technician");
+        developAgent.displayInfo();
+        developAgent.displayDev();
+    }
+}
