@@ -1,0 +1,195 @@
+
+package pkgGloElectronicsManagementSystem;
+
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
+
+enum ProductType {
+    Mobile,
+    Laptop,
+    Television,
+    Refrigerator,
+    WashingMachine
+}
+
+class Product {
+    private int prodId;
+    private String prodName;
+    private int quantity;
+    private ProductType typeOfProduct;
+
+    public Product(int prodId, String prodName, int quantity, ProductType typeOfProduct) {
+        this.prodId = prodId;
+        this.prodName = prodName;
+        this.quantity = quantity;
+        this.typeOfProduct = typeOfProduct;
+    }
+
+    public int getProdId() {
+        return prodId;
+    }
+
+    public String getProdName() {
+        return prodName;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public ProductType getTypeOfProduct() {
+        return typeOfProduct;
+    }
+}
+
+class ProductManagement {
+    private List<Product> products;
+    private List<Customer>customers;
+
+    public ProductManagement() {
+        products = new ArrayList<>();
+        customers = new ArrayList<>();
+    }
+
+    public void addProduct(int prodId, String prodName, int quantity, ProductType typeOfProduct) {
+        Product product = new Product(prodId, prodName, quantity, typeOfProduct);
+        products.add(product);
+    }
+
+    public void displayProducts() {
+        for (Product product : products) {
+            System.out.println("Product ID: " + product.getProdId());
+            System.out.println("Product Name: " + product.getProdName());
+            System.out.println("Quantity: " + product.getQuantity());
+            System.out.println("Type of Product: " + product.getTypeOfProduct());
+            System.out.println();
+        }
+    }
+
+    public boolean searchByName(String productName) {
+        for (Product product : products) {
+            if (product.getProdName().equalsIgnoreCase(productName)) {
+                return product.getQuantity() > 0;
+            }
+        }
+        return false;
+    }
+
+    public void sortByQuantity() {
+        products.sort(Comparator.comparingInt(Product::getQuantity));
+    }
+
+    public void addSalesDetails(String cId, String cName, List<Product> productList) {
+        Customer customer = new Customer(cId, cName, productList);
+        customers.add(customer);
+        customer.printDetails();
+    }
+
+    public List<Customer> createList() {
+        return customers.stream()
+                .filter(customer -> customer.getProductList().size() > 1)
+                .collect(Collectors.toList());
+    }
+
+    public void displayMessage(String productType) {
+        Runnable thread1 = () -> {
+            if (productType.equalsIgnoreCase("Mobile") || productType.equalsIgnoreCase("Laptop")) {
+                System.out.println("Thread 1: productType is Available");
+            }
+        };
+
+        Runnable thread2 = () -> {
+            System.out.println("Thread 2: Welcome to Glo Electronics");
+        };
+
+        Thread t1 = new Thread(thread1);
+        Thread t2 = new Thread(thread2);
+
+        t1.start();
+        t2.start();
+    }
+}
+
+class Customer {
+    private String cId;
+    private String cName;
+    private List<Product> productList;
+
+    public Customer(String cId, String cName, List<Product> productList) {
+        this.cId = cId;
+        this.cName = cName;
+        this.productList = productList;
+    }
+
+    public String getcId() {
+        return cId;
+    }
+
+    public String getcName() {
+        return cName;
+    }
+
+    public List<Product> getProductList() {
+        return productList;
+    }
+
+    public void printDetails() {
+        System.out.println("Customer ID: " + cId);
+        System.out.println("Customer Name: " + cName);
+        System.out.println("Products Purchased:");
+        for (Product product : productList) {
+            System.out.println("Product ID: " + product.getProdId());
+            System.out.println("Product Name: " + product.getProdName());
+            System.out.println("Quantity: " + product.getQuantity());
+            System.out.println("Type of Product: " + product.getTypeOfProduct());
+            System.out.println();
+        }
+    }
+}
+
+public class GloElectronicsMain {
+    public static void main(String[] args) {
+        ProductManagement productManagement = new ProductManagement();
+
+        // Adding products
+        productManagement.addProduct(101, "Iphone 14 pro", 12, ProductType.Mobile);
+        productManagement.addProduct(102, "Acer", 14, ProductType.Laptop);
+        productManagement.addProduct(103, "Sony", 12, ProductType.Television);
+        productManagement.addProduct(104, "Samsung", 14, ProductType.Refrigerator);
+        productManagement.addProduct(105, "Panasonic", 15, ProductType.WashingMachine);
+
+        // Displaying products
+        productManagement.displayProducts();
+
+        // Search by product name
+        String productName = "Acer";
+        boolean isAvailable = productManagement.searchByName(productName);
+        System.out.println("Product '" + productName + "' is available: " + isAvailable);
+
+        // Sort by quantity
+        productManagement.sortByQuantity();
+        System.out.println("Products sorted by quantity:");
+        productManagement.displayProducts();
+
+        // Adding sales details for a customer
+        List<Product> productList = new ArrayList<>();
+        productList.add(new Product(201, "Product 1", 5, ProductType.Mobile));
+        productList.add(new Product(202, "Product 2", 3, ProductType.Laptop));
+        productList.add(new Product(203, "Product 3", 7, ProductType.Television));
+        productManagement.addSalesDetails("c101", "Maheshwari", productList);
+
+        // Creating list of customers who purchased more than one type of product
+        List<Customer> customerList = productManagement.createList();
+        System.out.println("Customers who purchased more than one type of product:");
+        for (Customer customer : customerList) {
+            System.out.println("Customer ID: " + customer.getcId());
+            System.out.println("Customer Name: " + customer.getcName());
+            System.out.println();
+        }
+
+        // Displaying messages using threads
+        productManagement.displayMessage("Mobile");
+    }
+}
