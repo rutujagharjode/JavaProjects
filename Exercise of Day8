@@ -1,0 +1,91 @@
+Problem statement 
+
+Exrcise 1 :
+create table Employee(empId int primary key, empName varchar(255) not null, empSal int default(10000));
+insert into Employee values
+(101,'A',default),
+(102,'B',20000),
+(103,'C',25000);
+create table leaves(
+empId int not null, 
+noOfLeaves int,
+foreign key (empId) references Employee(empId)
+);
+insert into leaves values(101,5);
+insert into leaves values(101,10);
+insert into leaves values(105,5);
+insert into leaves values(null,5);
+select*from Leaves;
+select*fromEmployee;
+/////need to perform 
+1.Insert an Employee as:104,'D',3000
+2.Insert a Leave as :104,20
+3try to delete 104 from Employee
+4try to update 104 to 105 in Employee(Paste the error msg )
+5insert into Employee Values 
+(111,'D',15000),
+(112,'E',21000),
+(113,'A',25500);
+code :
+
+////#1.Insert an Employee as:104,'D',3000
+insert into Employee values
+(104,'D',3000);
+select *from Employee;
+
+output:
+1.101	A	10000
+102	B	20000
+103	C	25000
+104	D	3000
+		
+
+///.#2. Insert a Leave as :104,20
+insert into leaves values(104,20);
+select*from Leaves;
+output :
+101	5
+101	10
+104	20
+
+
+////3#3.try to delete 104 from Employee(Paste the error msg )
+delete from Employee WHERE empid = 104;
+#outputmsg :	19:53:38	delete from Employee WHERE empid = 104	Error Code: 1451. Cannot delete or update a parent row: a foreign key constraint fails (`javadb`.`leaves`, CONSTRAINT `leaves_ibfk_1` FOREIGN KEY (`empId`) REFERENCES `employee` (`empId`))	0.000 sec
+
+///4.#4.try to update 104 to 105 in Employee(Paste the error msg )
+update Employee set empid=105 where empid=104;
+output msg:  19:54:46update Employee set empid=105 where empid=104	Error Code: 1451. Cannot delete or update a parent row: a foreign key constraint fails (`javadb`.`leaves`, CONSTRAINT `leaves_ibfk_1` FOREIGN KEY (`empId`) REFERENCES `employee` (`empId`))	0.000 sec
+
+//5:#5.insert into Employee Values 
+#(111,'D',15000),
+#(112,'E',21000),
+#(113,'A',25500);
+
+insert into Employee values
+(111,'D',15000),
+(112,'E',21000),
+(113,'A',25500);
+
+ouput :101	A	10000
+102	B	20000
+103	C	25000
+104	D	3000
+111	D	15000
+112	E	21000
+113	A	25500
+		-----------------------------------------------------
+
+
+Exercise 2:#exercise 3 Select name of two people with max age : training
+#Hint: Use order by and limit together
+code 
+select * from people;
+SELECT name FROM people
+WHERE age = (SELECT MAX(age)FROM people)LIMIT 2;
+ouput :
+John
+Jay
+
+
+
