@@ -1,5 +1,60 @@
-package pkgHibernate;
+Problem statement :
+Consider the entity Employee(empId, empName, empSal, empAge, CompName); empId is auto generated.
+Create a menu driven program depicting the CRUD operations for the Employee table through Hibernate
+1. Insert A new Employee (input from client)
+2. Update an existing Employee based on ID:
+Ask for the empId
+Display old information: use session.get()
+Take new information from client
+Do updates
+3. Delete an Emp based on ID
+Ask for the ID.
+Delete the user based on id
+4. Display the List of Emps
+5. Search for an emp according to empId (input from user)
+6. Exit
 
+class :HibernateUtil
+package pkgHibernate;
+import java.util.Properties;
+import org.hibernate.SessionFactory;
+
+import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
+import org.hibernate.cfg.Configuration;
+import org.hibernate.service.ServiceRegistry;
+
+public class HibernateUtil {
+    private static SessionFactory sessionFactory;
+
+    public static SessionFactory getSessionFactory() {
+        if (sessionFactory == null) {
+            try {
+                Configuration configuration = new Configuration();
+                Properties settings = new Properties();
+                settings.put("hibernate.connection.driver_class", "com.mysql.jdbc.Driver");
+                settings.put("hibernate.connection.url", "jdbc:mysql://localhost:3306/javadb");
+                settings.put("hibernate.connection.username", "root");
+                settings.put("hibernate.connection.password", "Rghar@124");
+                settings.put("hibernate.dialect", "org.hibernate.dialect.MySQL5Dialect");
+                settings.put("hibernate.show_sql", "true");
+                settings.put("hibernate.current_session_context_class", "thread");
+                settings.put("hibernate.hbm2ddl.auto", "update");
+                configuration.setProperties(settings);
+                configuration.addAnnotatedClass(Employee.class);
+                ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
+                        .applySettings(configuration.getProperties()).build();
+                sessionFactory = configuration.buildSessionFactory(serviceRegistry);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return sessionFactory;
+    }
+}
+-----
+
+class :EmployeeMainClass
+package pkgHibernate;
 import java.util.*;
 import org.hibernate.*;
 import org.hibernate.cfg.*;
@@ -63,6 +118,11 @@ public class EmployeeMainClass {
         System.out.print("Company Name: ");
         String compName = scanner.next();
 
+        if (empSal < 0 || empAge < 0) {
+            System.out.println("Salary and age cannot be negative!");
+            return;
+        }
+
         Employee employee = new Employee(empName, empSal, empAge, compName);
 
         Session session = sessionFactory.openSession();
@@ -70,7 +130,7 @@ public class EmployeeMainClass {
 
         try {
             transaction = session.beginTransaction();
-            session.persist(employee);  // Use persist() instead of save()
+            session.persist(employee);
             transaction.commit();
             System.out.println("Employee inserted successfully!");
         } catch (Exception e) {
@@ -111,6 +171,11 @@ public class EmployeeMainClass {
             scanner.nextLine(); // Consume the newline character
             System.out.print("Enter new company name: ");
             String newCompName = scanner.nextLine();
+
+            if (newEmpSal < 0 || newEmpAge < 0) {
+                System.out.println("Salary and age cannot be negative!");
+                return;
+            }
 
             employee.setEmpName(newEmpName);
             employee.setEmpSal(newEmpSal);
@@ -209,97 +274,348 @@ public class EmployeeMainClass {
         }
     }
 }
+-------
+class :Employee
+package pkgHibernate;
 
+import javax.persistence.*;
 
-
-
-
-private static void insertEmployee(Scanner scanner) {
-    System.out.println("Enter employee details:");
-    System.out.print("Name: ");
-    String empName = scanner.next();
-    System.out.print("Salary: ");
-    double empSal = scanner.nextDouble();
-    System.out.print("Age: ");
-    int empAge = scanner.nextInt();
-    System.out.print("Company Name: ");
-    String compName = scanner.next();
-
-    if (empSal < 0 || empAge < 0) {
-        System.out.println("Salary and age cannot be negative!");
-        return;
+@Entity
+@Table(name = "emp")
+public class Employee {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name="empId")
+    private int empId;
+    private String empName;
+    private double empSal;
+    private int empAge;
+    private String compName;
+ 
+    public Employee() {
     }
 
-    Employee employee = new Employee(empName, empSal, empAge, compName);
-
-    Session session = sessionFactory.openSession();
-    Transaction transaction = null;
-
-    try {
-        transaction = session.beginTransaction();
-        session.persist(employee);
-        transaction.commit();
-        System.out.println("Employee inserted successfully!");
-    } catch (Exception e) {
-        if (transaction != null) {
-            transaction.rollback();
-        }
-        e.printStackTrace();
-    } finally {
-        session.close();
+    public Employee(String empName, double empSal, int empAge, String compName) {
+        this.empName = empName;
+        this.empSal = empSal;
+        this.empAge = empAge;
+        this.compName = compName;
     }
-}
 
-private static void updateEmployee(Scanner scanner) {
-    System.out.println("\n***** Update Employee *****");
-    System.out.print("Enter employee ID: ");
-    int empId = scanner.nextInt();
-    scanner.nextLine(); // Consume the newline character
+    // Getters and Setters
 
-    Session session = sessionFactory.openSession();
-    Transaction transaction = null;
+    public int getEmpId() {
+        return empId;
+    }
 
-    try {
-        Employee employee = session.get(Employee.class, empId);
-        if (employee == null) {
-            System.out.println("Employee not found with ID: " + empId);
-            return;
-        }
+    public void setEmpId(int empId) {
+        this.empId = empId;
+    }
 
-        System.out.println("Old Information:");
-        System.out.println(employee);
+    public String getEmpName() {
+        return empName;
+    }
 
-        System.out.print("Enter new employee name: ");
-        String newEmpName = scanner.nextLine();
-        System.out.print("Enter new employee salary: ");
-        double newEmpSal = scanner.nextDouble();
-        System.out.print("Enter new employee age: ");
-        int newEmpAge = scanner.nextInt();
-        scanner.nextLine(); // Consume the newline character
-        System.out.print("Enter new company name: ");
-        String newCompName = scanner.nextLine();
+    public void setEmpName(String empName) {
+        this.empName = empName;
+    }
 
-        if (newEmpSal < 0 || newEmpAge < 0) {
-            System.out.println("Salary and age cannot be negative!");
-            return;
-        }
+    public double getEmpSal() {
+        return empSal;
+    }
 
-        employee.setEmpName(newEmpName);
-        employee.setEmpSal(newEmpSal);
-        employee.setEmpAge(newEmpAge);
-        employee.setCompName(newCompName);
+    public void setEmpSal(double empSal) {
+        this.empSal = empSal;
+    }
 
-        transaction = session.beginTransaction();
-        session.update(employee);
-        transaction.commit();
-        System.out.println("Employee updated successfully!");
-    } catch (Exception e) {
-        if (transaction != null) {
-            transaction.rollback();
-        }
-        System.out.println("Failed to update employee. Error: " + e.getMessage());
-    } finally {
-        session.close();
+    public int getEmpAge() {
+        return empAge;
+    }
+
+    public void setEmpAge(int empAge) {
+        this.empAge = empAge;
+    }
+
+    public String getCompName() {
+        return compName;
+    }
+
+    public void setCompName(String compName) {
+        this.compName = compName;
+    }
+
+    // toString method
+
+    @Override
+    public String toString() {
+        return "Employee [empId=" + empId + ", empName=" + empName + ", empSal=" + empSal + ", empAge=" + empAge
+                + ", compName=" + compName + "]";
     }
 }
+----------------------------------*-------------------------
+
+
+
+problem statement 2:
+Create a menu driven program depicting the CRUD operations for emp table in JDBC, Java
+1. Insert A new Emp (input from client)
+2. Update an existing Emp based on ID:
+Ask for the ID.
+Display old information:
+“Select * from emp where id = “ + id;
+Take new information from client
+Do updates
+3. Delete an Emp based on ID
+Ask for the ID.
+Delete the user based on id
+4. Display the List of Emps
+5. Exit
+
+
+code :
+class :EmployeJDBC
+package pkgEmployeeManagementSystem;
+public class EmployeJDBC {
+
+	private int employeeId;
+    private String name;
+    private String designation;
+    private double salary;
+
+    public int getEmployeeId() {
+        return employeeId;
+    }
+
+    public void setEmployeeId(int employeeId) {
+        this.employeeId = employeeId;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getDesignation() {
+        return designation;
+    }
+
+    public void setDesignation(String designation) {
+        this.designation = designation;
+    }
+
+    public double getSalary() {
+        return salary;
+    }
+
+    public void setSalary(double salary) {
+        this.salary = salary;
+    }
+    
+    @Override
+    public String toString() {
+        return "Employee ID: " + employeeId + "\nName: " + name + "\nDesignation: " + designation +"\nSalary: " + salary +"\n------------------------";
+    }
+}
+--------------
+class :EmployeeSystemJDBC
+package pkgEmployeeManagementSystem;
+import java.util.ArrayList;
+import java.util.List;
+
+public class EmployeeSystemJDBC {
+	 private List<EmployeJDBC> employees;
+
+	    public EmployeeSystemJDBC() {
+	        employees = new ArrayList<>();
+}
+	    public void addEmployee(EmployeJDBC employee) {
+	        if (isDuplicateId(employee.getEmployeeId())) {
+	            System.out.println("Error: Employee ID already exists.");
+	        } else {
+	            employees.add(employee);
+	            System.out.println("Employee added successfully.");
+	        }
+	    }
+
+	    public void removeEmployee(int employeeId) {
+	        int index = findEmployeeIndex(employeeId);
+	        if (index == -1) {
+	            System.out.println("Error: Employee not found.");
+	        } else {
+	            employees.remove(index);
+	            System.out.println("Employee removed successfully.");
+	        }
+	    }
+
+	    public void displayAllEmployees() {
+	        if (employees.isEmpty()) {
+	            System.out.println("No employees found.");
+	        } else {
+	            for (EmployeJDBC employee : employees) {
+	                System.out.println(employee);
+	            }
+	        }
+	    }
+
+	    public void updateEmployee(int employeeId, String newName, String newDesignation, double newSalary) {
+	        int index = findEmployeeIndex(employeeId);
+	        if (index == -1) {
+	            System.out.println("Error: Employee not found.");
+	        } else {
+	        	EmployeJDBC employee = employees.get(index);
+	            employee.setName(newName);
+	            employee.setDesignation(newDesignation);
+	            employee.setSalary(newSalary);
+	            System.out.println("Employee updated successfully.");
+	        }
+	    }
+
+	    private boolean isDuplicateId(int employeeId) {
+	        for (EmployeJDBC employee : employees) {
+	            if (employee.getEmployeeId() == employeeId) {
+	                return true;
+	            }
+	        }
+	        return false;
+	    }
+
+	    
+	    private int findEmployeeIndex(int employeeId) {
+	        for (int i = 0; i < employees.size(); i++) {
+	            if (employees.get(i).getEmployeeId() == employeeId) {
+	                return i;
+	            }
+	        }
+	        return -1;
+	    }
+}
+--------
+class :mployeeJDBCMain
+package pkgEmployeeManagementSystem;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.util.Scanner;
+import java.sql.*;
+
+public class EmployeeJDBCMain {
+
+	 public static void main(String[] args) {
+		 
+			try {
+				//Class.forName is used to load the Class from the parameter onto the JVM
+				Class.forName("com.mysql.jdbc.Driver"); 
+				Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/javadb", "root", "Rghar@124");
+				//here javadb is database name, root is username and password  
+				Statement stmt = con.createStatement();
+				ResultSet rs = stmt.executeQuery("select * from emp");
+				while (rs.next())
+					System.out.println(rs.getInt(1) + "  " + rs.getString(2) + "  " + rs.getInt(3));
+				con.close();
+			} catch (Exception e) {
+				System.out.println(e);
+			}
+		
+		 
+	        Scanner scanner = new Scanner(System.in);
+	        EmployeeSystemJDBC employeeSystem = new EmployeeSystemJDBC();
+
+	        while (true) {
+	            System.out.println("1. Add Employee");
+	            System.out.println("2. Remove Employee");
+	            System.out.println("3. Display All Employees");
+	            System.out.println("4. Update Employee");
+	            System.out.println("5. Exit");
+	            System.out.print("Enter your choice: ");
+
+	            int choice = getIntInput(scanner);
+
+	            if (choice == 1) {
+	                System.out.print("Enter Employee ID: ");
+	                int employeeId = getIntInput(scanner);
+
+	                System.out.print("Enter Name: ");
+	                String name = scanner.nextLine();
+
+	                System.out.print("Enter Designation: ");
+	                String designation = scanner.nextLine();
+
+	                System.out.print("Enter Salary: ");
+	                double salary = getDoubleInput(scanner);
+
+	                EmployeJDBC newEmployee = new EmployeJDBC();
+	                newEmployee.setEmployeeId(employeeId);
+	                newEmployee.setName(name);
+	                newEmployee.setDesignation(designation);
+	                newEmployee.setSalary(salary);
+
+	                employeeSystem.addEmployee(newEmployee);
+	            } else if (choice == 2) {
+	                System.out.print("Enter Employee ID: ");
+	                int removeId = getIntInput(scanner);
+
+	                employeeSystem.removeEmployee(removeId);
+	            } else if (choice == 3) {
+	                employeeSystem.displayAllEmployees();
+	            } else if (choice == 4) {
+	                System.out.print("Enter Employee ID: ");
+	                int updateId = getIntInput(scanner);
+
+	                System.out.print("Enter New Name: ");
+	                String newName = scanner.nextLine();
+
+	                System.out.print("Enter New Designation: ");
+	                String newDesignation = scanner.nextLine();
+
+	                System.out.print("Enter New Salary: ");
+	                double newSalary = getDoubleInput(scanner);
+
+	                employeeSystem.updateEmployee(updateId, newName, newDesignation, newSalary);
+	            } else if (choice == 5) {
+	                System.out.println("Exiting...");
+	                break;
+	            } else {
+	                System.out.println("Invalid choice. Please try again.");
+	            }
+
+	            System.out.println();
+	        }
+	    }
+
+	    private static int getIntInput(Scanner scanner) {
+	        int value;
+	        while (true) {
+	            try {
+	                value = scanner.nextInt();
+	                scanner.nextLine(); // Consume newline character
+	                break;
+	            } catch (Exception e) {
+	                System.out.println("Invalid input. Please enter a valid integer.");
+	                scanner.nextLine(); // Consume invalid input
+	            }
+	        }
+	        return value;
+	    }
+
+	    private static double getDoubleInput(Scanner scanner) {
+	        double value;
+	        while (true) {
+	            try {
+	                value = scanner.nextDouble();
+	                scanner.nextLine(); // Consume newline character
+	                break;
+	            } catch (Exception e) {
+	                System.out.println("Invalid input. Please enter a valid double.");
+	                scanner.nextLine(); // Consume invalid input
+	            }
+	        }
+	        return value;
+	    }
+	}
+
+	
 
