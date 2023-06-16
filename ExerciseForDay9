@@ -1,14 +1,16 @@
-	package pkgHibernate;
+package pkgHibernate;
 
-import java.util.*;
-import org.hibernate.*;
-import org.hibernate.cfg.*;
+import java.util.List;
+import java.util.Scanner;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 
 public class EmployeeMainClass {
     private static SessionFactory sessionFactory;
+    private static Scanner scanner = new Scanner(System.in);
 
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
         sessionFactory = HibernateUtil.getSessionFactory();
         int choice;
 
@@ -26,19 +28,19 @@ public class EmployeeMainClass {
 
             switch (choice) {
                 case 1:
-                    insertEmployee(scanner);
+                    insertEmployee();
                     break;
                 case 2:
-                    updateEmployee(scanner);
+                    updateEmployee();
                     break;
                 case 3:
-                    deleteEmployee(scanner);
+                    deleteEmployee();
                     break;
                 case 4:
                     displayEmployees();
                     break;
                 case 5:
-                    searchEmployee(scanner);
+                    searchEmployee();
                     break;
                 case 6:
                     System.out.println("Exiting the program. Goodbye!");
@@ -52,25 +54,40 @@ public class EmployeeMainClass {
         scanner.close();
     }
 
-    private static void insertEmployee(Scanner scanner) {
+    private static void insertEmployee() {
         System.out.println("Enter employee details:");
         System.out.print("Name: ");
-        String empName = scanner.next();
+        String empName = scanner.nextLine();
         System.out.print("Salary: ");
         double empSal = scanner.nextDouble();
         System.out.print("Age: ");
         int empAge = scanner.nextInt();
+        scanner.nextLine(); // Consume the newline character
         System.out.print("Company Name: ");
-        String compName = scanner.next();
+        String compName = scanner.nextLine();
 
-        Employee employee = new Employee(empName, empSal, empAge, compName);
+        if (empSal < 0 || empAge < 0) {
+            System.out.println("Salary and age cannot be negative!");
+            return;
+        }
 
         Session session = sessionFactory.openSession();
         Transaction transaction = null;
 
         try {
+            // Check if employee ID already exists
+            Employee existingEmployee = session.createQuery("FROM Employee WHERE empId = :id", Employee.class)
+                    .setParameter("id", empId)
+                    .uniqueResult();
+            if (existingEmployee != null) {
+                System.out.println("Employee with the same ID already exists!");
+                return;
+            }
+
+            Employee employee = new Employee(empName, empSal, empAge, compName);
+
             transaction = session.beginTransaction();
-            session.persist(employee);  // Use persist() instead of save()
+            session.persist(employee);
             transaction.commit();
             System.out.println("Employee inserted successfully!");
         } catch (Exception e) {
@@ -83,7 +100,7 @@ public class EmployeeMainClass {
         }
     }
 
-    private static void updateEmployee(Scanner scanner) {
+    private static void updateEmployee() {
         System.out.println("\n***** Update Employee *****");
         System.out.print("Enter employee ID: ");
         int empId = scanner.nextInt();
@@ -112,6 +129,11 @@ public class EmployeeMainClass {
             System.out.print("Enter new company name: ");
             String newCompName = scanner.nextLine();
 
+            if (newEmpSal < 0 || newEmpAge < 0) {
+                System.out.println("Salary and age cannot be negative!");
+                return;
+            }
+
             employee.setEmpName(newEmpName);
             employee.setEmpSal(newEmpSal);
             employee.setEmpAge(newEmpAge);
@@ -131,7 +153,7 @@ public class EmployeeMainClass {
         }
     }
 
-    private static void deleteEmployee(Scanner scanner) {
+    private static void deleteEmployee() {
         System.out.println("\n***** Delete Employee *****");
         System.out.print("Enter employee ID: ");
         int empId = scanner.nextInt();
@@ -150,62 +172,4 @@ public class EmployeeMainClass {
             session.delete(employee);
             transaction.commit();
             System.out.println("Employee deleted successfully!");
-        } catch (Exception e) {
-            if (transaction != null) {
-                transaction.rollback();
-            }
-            System.out.println("Failed to delete employee. Error: " + e.getMessage());
-        } finally {
-            session.close();
-        }
-    }
-
-    private static void displayEmployees() {
-        System.out.println("\n***** List of Employees *****");
-
-        Session session = sessionFactory.openSession();
-        Transaction transaction = null;
-
-        try {
-            transaction = session.beginTransaction();
-            List<Employee> employees = session.createQuery("FROM Employee", Employee.class).list();
-            for (Employee employee : employees) {
-                System.out.println(employee);
-            }
-            transaction.commit();
-        } catch (Exception e) {
-            if (transaction != null) {
-                transaction.rollback();
-            }
-            System.out.println("Failed to retrieve employees. Error: " + e.getMessage());
-        } finally {
-            session.close();
-        }
-    }
-
-    private static void searchEmployee(Scanner scanner) {
-        System.out.println("\n***** Search Employee *****");
-        System.out.print("Enter employee ID: ");
-        int empId = scanner.nextInt();
-
-        Session session = sessionFactory.openSession();
-        Transaction transaction = null;
-
-        try {
-            Employee employee = session.get(Employee.class, empId);
-            if (employee == null) {
-                System.out.println("Employee not found with ID: " + empId);
-                return;
-            }
-
-            System.out.println(employee);
-        } catch (Exception e) {
-            if (transaction != null) {
-                transaction.rollback();
-            }
-            System.out.println("Failed to search employee. Error: " + e.getMessage());
-        } finally {
-            session.close();
-        }
-    }
-}
+        } catch
