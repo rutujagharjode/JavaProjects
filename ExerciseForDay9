@@ -210,3 +210,41 @@ public class EmployeeMainClass {
     }
 }
 
+
+
+
+
+
+
+
+private static void insertEmployee() {
+    System.out.println("Enter employee details:");
+    System.out.print("Name: ");
+    String empName = scanner.next();
+    System.out.print("Salary: ");
+    double empSal = scanner.nextDouble();
+    System.out.print("Age: ");
+    int empAge = scanner.nextInt();
+    System.out.print("Company Name: ");
+    String compName = scanner.next();
+
+    Employee employee = new Employee(empName, empSal, empAge, compName);
+
+    Session session = sessionFactory.openSession();
+    Transaction transaction = null;
+
+    try {
+        transaction = session.beginTransaction();
+        session.persist(employee);  // Use persist() instead of save()
+        transaction.commit();
+        System.out.println("Employee inserted successfully!");
+    } catch (Exception e) {
+        if (transaction != null) {
+            transaction.rollback();
+        }
+        e.printStackTrace();
+    } finally {
+        session.close();
+    }
+}
+
