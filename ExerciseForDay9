@@ -1,16 +1,14 @@
 package pkgHibernate;
 
-import java.util.List;
-import java.util.Scanner;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
+import java.util.*;
+import org.hibernate.*;
+import org.hibernate.cfg.*;
 
 public class EmployeeMainClass {
     private static SessionFactory sessionFactory;
-    private static Scanner scanner = new Scanner(System.in);
 
     public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
         sessionFactory = HibernateUtil.getSessionFactory();
         int choice;
 
@@ -28,19 +26,19 @@ public class EmployeeMainClass {
 
             switch (choice) {
                 case 1:
-                    insertEmployee();
+                    insertEmployee(scanner);
                     break;
                 case 2:
-                    updateEmployee();
+                    updateEmployee(scanner);
                     break;
                 case 3:
-                    deleteEmployee();
+                    deleteEmployee(scanner);
                     break;
                 case 4:
                     displayEmployees();
                     break;
                 case 5:
-                    searchEmployee();
+                    searchEmployee(scanner);
                     break;
                 case 6:
                     System.out.println("Exiting the program. Goodbye!");
@@ -54,40 +52,25 @@ public class EmployeeMainClass {
         scanner.close();
     }
 
-    private static void insertEmployee() {
+    private static void insertEmployee(Scanner scanner) {
         System.out.println("Enter employee details:");
         System.out.print("Name: ");
-        String empName = scanner.nextLine();
+        String empName = scanner.next();
         System.out.print("Salary: ");
         double empSal = scanner.nextDouble();
         System.out.print("Age: ");
         int empAge = scanner.nextInt();
-        scanner.nextLine(); // Consume the newline character
         System.out.print("Company Name: ");
-        String compName = scanner.nextLine();
+        String compName = scanner.next();
 
-        if (empSal < 0 || empAge < 0) {
-            System.out.println("Salary and age cannot be negative!");
-            return;
-        }
+        Employee employee = new Employee(empName, empSal, empAge, compName);
 
         Session session = sessionFactory.openSession();
         Transaction transaction = null;
 
         try {
-            // Check if employee ID already exists
-            Employee existingEmployee = session.createQuery("FROM Employee WHERE empId = :id", Employee.class)
-                    .setParameter("id", empId)
-                    .uniqueResult();
-            if (existingEmployee != null) {
-                System.out.println("Employee with the same ID already exists!");
-                return;
-            }
-
-            Employee employee = new Employee(empName, empSal, empAge, compName);
-
             transaction = session.beginTransaction();
-            session.persist(employee);
+            session.persist(employee);  // Use persist() instead of save()
             transaction.commit();
             System.out.println("Employee inserted successfully!");
         } catch (Exception e) {
@@ -100,7 +83,7 @@ public class EmployeeMainClass {
         }
     }
 
-    private static void updateEmployee() {
+    private static void updateEmployee(Scanner scanner) {
         System.out.println("\n***** Update Employee *****");
         System.out.print("Enter employee ID: ");
         int empId = scanner.nextInt();
@@ -129,11 +112,6 @@ public class EmployeeMainClass {
             System.out.print("Enter new company name: ");
             String newCompName = scanner.nextLine();
 
-            if (newEmpSal < 0 || newEmpAge < 0) {
-                System.out.println("Salary and age cannot be negative!");
-                return;
-            }
-
             employee.setEmpName(newEmpName);
             employee.setEmpSal(newEmpSal);
             employee.setEmpAge(newEmpAge);
@@ -153,7 +131,7 @@ public class EmployeeMainClass {
         }
     }
 
-    private static void deleteEmployee() {
+    private static void deleteEmployee(Scanner scanner) {
         System.out.println("\n***** Delete Employee *****");
         System.out.print("Enter employee ID: ");
         int empId = scanner.nextInt();
@@ -205,7 +183,7 @@ public class EmployeeMainClass {
         }
     }
 
-    private static void searchEmployee() {
+    private static void searchEmployee(Scanner scanner) {
         System.out.println("\n***** Search Employee *****");
         System.out.print("Enter employee ID: ");
         int empId = scanner.nextInt();
