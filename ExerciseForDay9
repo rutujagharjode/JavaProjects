@@ -209,3 +209,97 @@ public class EmployeeMainClass {
         }
     }
 }
+
+
+
+
+
+private static void insertEmployee(Scanner scanner) {
+    System.out.println("Enter employee details:");
+    System.out.print("Name: ");
+    String empName = scanner.next();
+    System.out.print("Salary: ");
+    double empSal = scanner.nextDouble();
+    System.out.print("Age: ");
+    int empAge = scanner.nextInt();
+    System.out.print("Company Name: ");
+    String compName = scanner.next();
+
+    if (empSal < 0 || empAge < 0) {
+        System.out.println("Salary and age cannot be negative!");
+        return;
+    }
+
+    Employee employee = new Employee(empName, empSal, empAge, compName);
+
+    Session session = sessionFactory.openSession();
+    Transaction transaction = null;
+
+    try {
+        transaction = session.beginTransaction();
+        session.persist(employee);
+        transaction.commit();
+        System.out.println("Employee inserted successfully!");
+    } catch (Exception e) {
+        if (transaction != null) {
+            transaction.rollback();
+        }
+        e.printStackTrace();
+    } finally {
+        session.close();
+    }
+}
+
+private static void updateEmployee(Scanner scanner) {
+    System.out.println("\n***** Update Employee *****");
+    System.out.print("Enter employee ID: ");
+    int empId = scanner.nextInt();
+    scanner.nextLine(); // Consume the newline character
+
+    Session session = sessionFactory.openSession();
+    Transaction transaction = null;
+
+    try {
+        Employee employee = session.get(Employee.class, empId);
+        if (employee == null) {
+            System.out.println("Employee not found with ID: " + empId);
+            return;
+        }
+
+        System.out.println("Old Information:");
+        System.out.println(employee);
+
+        System.out.print("Enter new employee name: ");
+        String newEmpName = scanner.nextLine();
+        System.out.print("Enter new employee salary: ");
+        double newEmpSal = scanner.nextDouble();
+        System.out.print("Enter new employee age: ");
+        int newEmpAge = scanner.nextInt();
+        scanner.nextLine(); // Consume the newline character
+        System.out.print("Enter new company name: ");
+        String newCompName = scanner.nextLine();
+
+        if (newEmpSal < 0 || newEmpAge < 0) {
+            System.out.println("Salary and age cannot be negative!");
+            return;
+        }
+
+        employee.setEmpName(newEmpName);
+        employee.setEmpSal(newEmpSal);
+        employee.setEmpAge(newEmpAge);
+        employee.setCompName(newCompName);
+
+        transaction = session.beginTransaction();
+        session.update(employee);
+        transaction.commit();
+        System.out.println("Employee updated successfully!");
+    } catch (Exception e) {
+        if (transaction != null) {
+            transaction.rollback();
+        }
+        System.out.println("Failed to update employee. Error: " + e.getMessage());
+    } finally {
+        session.close();
+    }
+}
+
