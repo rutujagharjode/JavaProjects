@@ -172,4 +172,62 @@ public class EmployeeMainClass {
             session.delete(employee);
             transaction.commit();
             System.out.println("Employee deleted successfully!");
-        } catch
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            System.out.println("Failed to delete employee. Error: " + e.getMessage());
+        } finally {
+            session.close();
+        }
+    }
+
+    private static void displayEmployees() {
+        System.out.println("\n***** List of Employees *****");
+
+        Session session = sessionFactory.openSession();
+        Transaction transaction = null;
+
+        try {
+            transaction = session.beginTransaction();
+            List<Employee> employees = session.createQuery("FROM Employee", Employee.class).list();
+            for (Employee employee : employees) {
+                System.out.println(employee);
+            }
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            System.out.println("Failed to retrieve employees. Error: " + e.getMessage());
+        } finally {
+            session.close();
+        }
+    }
+
+    private static void searchEmployee() {
+        System.out.println("\n***** Search Employee *****");
+        System.out.print("Enter employee ID: ");
+        int empId = scanner.nextInt();
+
+        Session session = sessionFactory.openSession();
+        Transaction transaction = null;
+
+        try {
+            Employee employee = session.get(Employee.class, empId);
+            if (employee == null) {
+                System.out.println("Employee not found with ID: " + empId);
+                return;
+            }
+
+            System.out.println(employee);
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            System.out.println("Failed to search employee. Error: " + e.getMessage());
+        } finally {
+            session.close();
+        }
+    }
+}
