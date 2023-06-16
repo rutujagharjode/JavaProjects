@@ -1,1 +1,212 @@
-1
+package pkgHibernate;
+
+import java.util.*;
+import org.hibernate.*;
+import org.hibernate.cfg.*;
+
+public class EmployeeMainClass {
+    private static SessionFactory sessionFactory;
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        sessionFactory = HibernateUtil.getSessionFactory();
+        int choice;
+
+        do {
+            System.out.println("\n****** CRUD Operations Menu ******");
+            System.out.println("1. Insert a new Employee");
+            System.out.println("2. Update an existing Employee based on ID");
+            System.out.println("3. Delete an Employee based on ID");
+            System.out.println("4. Display the List of Employees");
+            System.out.println("5. Search for an Employee based on ID");
+            System.out.println("6. Exit");
+            System.out.print("Enter your choice: ");
+            choice = scanner.nextInt();
+            scanner.nextLine(); // Consume the newline character
+
+            switch (choice) {
+                case 1:
+                    insertEmployee(scanner);
+                    break;
+                case 2:
+                    updateEmployee(scanner);
+                    break;
+                case 3:
+                    deleteEmployee(scanner);
+                    break;
+                case 4:
+                    displayEmployees();
+                    break;
+                case 5:
+                    searchEmployee(scanner);
+                    break;
+                case 6:
+                    System.out.println("Exiting the program. Goodbye!");
+                    break;
+                default:
+                    System.out.println("Invalid choice. Please try again.");
+            }
+        } while (choice != 6);
+
+        sessionFactory.close();
+        scanner.close();
+    }
+
+    private static void insertEmployee(Scanner scanner) {
+        System.out.println("\n***** Insert Employee *****");
+        System.out.print("Enter employee name: ");
+        String empName = scanner.nextLine();
+        System.out.print("Enter employee salary: ");
+        double empSal = scanner.nextDouble();
+        System.out.print("Enter employee age: ");
+        int empAge = scanner.nextInt();
+        scanner.nextLine(); // Consume the newline character
+        System.out.print("Enter company name: ");
+        String compName = scanner.nextLine();
+
+        Session session = sessionFactory.openSession();
+        Transaction transaction = null;
+
+        try {
+            Employee employee = new Employee(empName, empSal, empAge, compName);
+            transaction = session.beginTransaction();
+            session.save(employee);
+            transaction.commit();
+            System.out.println("Employee inserted successfully!");
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            System.out.println("Failed to insert employee. Error: " + e.getMessage());
+        } finally {
+            session.close();
+        }
+    }
+
+    private static void updateEmployee(Scanner scanner) {
+        System.out.println("\n***** Update Employee *****");
+        System.out.print("Enter employee ID: ");
+        int empId = scanner.nextInt();
+        scanner.nextLine(); // Consume the newline character
+
+        Session session = sessionFactory.openSession();
+        Transaction transaction = null;
+
+        try {
+            Employee employee = session.get(Employee.class, empId);
+            if (employee == null) {
+                System.out.println("Employee not found with ID: " + empId);
+                return;
+            }
+
+            System.out.println("Old Information:");
+            System.out.println(employee);
+
+            System.out.print("Enter new employee name: ");
+            String newEmpName = scanner.nextLine();
+            System.out.print("Enter new employee salary: ");
+            double newEmpSal = scanner.nextDouble();
+            System.out.print("Enter new employee age: ");
+            int newEmpAge = scanner.nextInt();
+            scanner.nextLine(); // Consume the newline character
+            System.out.print("Enter new company name: ");
+            String newCompName = scanner.nextLine();
+
+            employee.setEmpName(newEmpName);
+            employee.setEmpSal(newEmpSal);
+            employee.setEmpAge(newEmpAge);
+            employee.setCompName(newCompName);
+
+            transaction = session.beginTransaction();
+            session.update(employee);
+            transaction.commit();
+            System.out.println("Employee updated successfully!");
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            System.out.println("Failed to update employee. Error: " + e.getMessage());
+        } finally {
+            session.close();
+        }
+    }
+
+    private static void deleteEmployee(Scanner scanner) {
+        System.out.println("\n***** Delete Employee *****");
+        System.out.print("Enter employee ID: ");
+        int empId = scanner.nextInt();
+
+        Session session = sessionFactory.openSession();
+        Transaction transaction = null;
+
+        try {
+            Employee employee = session.get(Employee.class, empId);
+            if (employee == null) {
+                System.out.println("Employee not found with ID: " + empId);
+                return;
+            }
+
+            transaction = session.beginTransaction();
+            session.delete(employee);
+            transaction.commit();
+            System.out.println("Employee deleted successfully!");
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            System.out.println("Failed to delete employee. Error: " + e.getMessage());
+        } finally {
+            session.close();
+        }
+    }
+
+    private static void displayEmployees() {
+        System.out.println("\n***** List of Employees *****");
+
+        Session session = sessionFactory.openSession();
+        Transaction transaction = null;
+
+        try {
+            transaction = session.beginTransaction();
+            List<Employee> employees = session.createQuery("FROM Employee", Employee.class).list();
+            for (Employee employee : employees) {
+                System.out.println(employee);
+            }
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            System.out.println("Failed to retrieve employees. Error: " + e.getMessage());
+        } finally {
+            session.close();
+        }
+    }
+
+    private static void searchEmployee(Scanner scanner) {
+        System.out.println("\n***** Search Employee *****");
+        System.out.print("Enter employee ID: ");
+        int empId = scanner.nextInt();
+
+        Session session = sessionFactory.openSession();
+        Transaction transaction = null;
+
+        try {
+            Employee employee = session.get(Employee.class, empId);
+            if (employee == null) {
+                System.out.println("Employee not found with ID: " + empId);
+                return;
+            }
+
+            System.out.println(employee);
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            System.out.println("Failed to search employee. Error: " + e.getMessage());
+        } finally {
+            session.close();
+        }
+    }
+}
+
