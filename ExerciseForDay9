@@ -1,4 +1,4 @@
-package pkgHibernate;
+	package pkgHibernate;
 
 import java.util.*;
 import org.hibernate.*;
@@ -53,31 +53,31 @@ public class EmployeeMainClass {
     }
 
     private static void insertEmployee(Scanner scanner) {
-        System.out.println("\n***** Insert Employee *****");
-        System.out.print("Enter employee name: ");
-        String empName = scanner.nextLine();
-        System.out.print("Enter employee salary: ");
+        System.out.println("Enter employee details:");
+        System.out.print("Name: ");
+        String empName = scanner.next();
+        System.out.print("Salary: ");
         double empSal = scanner.nextDouble();
-        System.out.print("Enter employee age: ");
+        System.out.print("Age: ");
         int empAge = scanner.nextInt();
-        scanner.nextLine(); // Consume the newline character
-        System.out.print("Enter company name: ");
-        String compName = scanner.nextLine();
+        System.out.print("Company Name: ");
+        String compName = scanner.next();
+
+        Employee employee = new Employee(empName, empSal, empAge, compName);
 
         Session session = sessionFactory.openSession();
         Transaction transaction = null;
 
         try {
-            Employee employee = new Employee(empName, empSal, empAge, compName);
             transaction = session.beginTransaction();
-            session.save(employee);
+            session.persist(employee);  // Use persist() instead of save()
             transaction.commit();
             System.out.println("Employee inserted successfully!");
         } catch (Exception e) {
             if (transaction != null) {
                 transaction.rollback();
             }
-            System.out.println("Failed to insert employee. Error: " + e.getMessage());
+            e.printStackTrace();
         } finally {
             session.close();
         }
@@ -209,42 +209,3 @@ public class EmployeeMainClass {
         }
     }
 }
-
-
-
-
-
-
-
-
-private static void insertEmployee() {
-    System.out.println("Enter employee details:");
-    System.out.print("Name: ");
-    String empName = scanner.next();
-    System.out.print("Salary: ");
-    double empSal = scanner.nextDouble();
-    System.out.print("Age: ");
-    int empAge = scanner.nextInt();
-    System.out.print("Company Name: ");
-    String compName = scanner.next();
-
-    Employee employee = new Employee(empName, empSal, empAge, compName);
-
-    Session session = sessionFactory.openSession();
-    Transaction transaction = null;
-
-    try {
-        transaction = session.beginTransaction();
-        session.persist(employee);  // Use persist() instead of save()
-        transaction.commit();
-        System.out.println("Employee inserted successfully!");
-    } catch (Exception e) {
-        if (transaction != null) {
-            transaction.rollback();
-        }
-        e.printStackTrace();
-    } finally {
-        session.close();
-    }
-}
-
