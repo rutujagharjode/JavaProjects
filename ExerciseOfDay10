@@ -1,0 +1,73 @@
+problem statment :
+WAP
+in Java to take an input String and match it’s pattern with : 
+First two single digits, then a / then two more digits then a / and at last two 
+WAP in Java to take an input String and match it’s pattern with : 
+First two single digits, then a / then two more digits then a / and at last two more digits
+Eg: 08/60/88 is a match.
+
+code :
+package pkgDay10;
+
+import java.util.Scanner;
+import java.util.regex.*;
+
+public class ExerciseDay10 {
+    public static void main(String[] args) {
+       
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Enter the input string: ");
+        String input = scanner.nextLine();
+        String pattern = "\\d{2}/\\d{2}/\\d{2}";
+        Pattern p = Pattern.compile(pattern);
+        Matcher matcher = p.matcher(input);
+
+        if (matcher.matches()) {
+            System.out.println("Input string matches the pattern.");
+        } else {
+            System.out.println("Input string does not match the pattern.");
+        }
+
+    }
+}
+ 
+ 
+ problem statement :WAP in JDBC to insert name and emailid in a table Register in MySQL
+Store 2-3 values and list them in a separate code list all values from table
+
+
+code :
+package pkgDay10;
+
+
+
+import java.io.*;
+import java.sql.*;
+
+public class ListEntriesFromRegTable {
+    public static void main(String[] args) {
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/javadb", "root", "Rghar@124");
+            // here javadb is the database name, root is the username, and Rghar@124 is the password
+            Statement stmt = con.createStatement();
+
+            // Listing all values from the Register table
+            ResultSet resultSet = stmt.executeQuery("SELECT * FROM reg");
+            while (resultSet.next()) {
+                String name = resultSet.getString("name");
+                String email = resultSet.getString("email");
+                System.out.println("Name: " + name);
+                System.out.println("Email: " + email);
+                System.out.println();
+            }
+
+            resultSet.close();
+            stmt.close();
+            con.close();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+}
+
