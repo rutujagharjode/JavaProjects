@@ -1,0 +1,256 @@
+Ex1:Create a login form 
+file name:
+<!DOCTYPE html>
+<html>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>Login Form</title>
+</head>
+<body>
+    <form action="Records.html">
+        <fieldset style="background-color: aquamarine; border: 2px solid darkblue;">
+       <legend>Sign in</legend>
+  <form id="LoginForm" action="">
+    <label for="name">Name:</label>
+    <input type="text" id="name" name="name" required><br><br>
+
+    <label for="address">Address:</label>
+    <input type="text" id="address" name="address" required><br><br>
+
+    <label for="gender">Gender:</label>
+    <input type="radio" id="male" name="gender" value="male" required>
+    <label for="male">Male</label>
+    <input type="radio" id="female" name="gender" value="female" required>
+    <label for="female">Female</label><br><br>
+
+    <label for="education">Education:</label>
+    <select id="education" name="education" required>
+      <option value="">Select Education Type</option>
+      <option value="BE">BE</option>
+      <option value="ME">ME</option>
+      <option value="Graduation">Graduation</option>
+    </select><br><br>
+
+    <input type="submit" value="Submit">
+  </form>
+</body>
+</html>
+
+//Record.html 
+<!DOCTYPE html>
+<html>
+<head>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>Record</title>
+</head>
+<body> 
+    <b>Records are inserted </b>
+</body>
+</head>
+
+    </html>
+-----------------------------------------------------
+Ex2:Align a paragraph center and justify 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    p{
+        background-color: rgb(300, 200, 100);
+        font-style:inherit ;
+        padding: 28px;
+        color: blueviolet;
+    }
+</style>
+<body>
+    <h1><b><i>Selector:</i></b></h1>
+    <p>College life exposes us to new experiences and things that we were not familiar with earlier. For some people, college life means enjoying life to the fullest and partying hard. While for others, it is time to get serious about their career and study thoroughly for a brighter future.</p>
+</body>
+</html>
+--------------------------
+Ex3:Apply boarder to an image with css 
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>Sample List style</title>
+    <style>
+        .borderstyle {
+            padding: 25px;
+            border: 6px solid forestgreen;
+        }
+
+        .colorborder {
+            border-style: dotted;
+            border-color: blueviolet;
+            padding: 30px;
+        }
+
+        .imageborder {
+            border: 1px solid red;
+            padding: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="borderstyle">
+        <p>Some content will be there in p tag and we will apply border with CSS to the </p>
+    </div>
+
+    <div class="colorborder">
+        <p>Some content will be there in p tag and we will apply border with CSS to the </p>
+    </div>
+
+    <div class="imageborder">
+        <img src="/img/flower" alt="flower">
+    </div>
+</body>
+</html>
+-------------------------------
+Ex:4 Create a grreting card 
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Greeting Card</title>
+  <style>
+    body {
+      background-color: #f5f5f5;
+      font-family: Arial, sans-serif;
+      text-align: center;
+    }
+    
+    .card {
+      display: inline-block;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      background-color: white;
+    }
+    
+    .card img {
+      max-width: 100%;
+      border-radius: 5px;
+    }
+    
+    .greeting {
+      font-size: 24px;
+      margin-top: 20px;
+    }
+    
+    .signature {
+      font-style: italic;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <img src="/img/birthdaycard.webp" alt="BirthdayCard">
+    <h2 class="greeting">Happy Birthday!</h2>
+    <p class="signature">Best wishes on your special day!</p>
+  </div>
+</body>
+</html>
+-------------------------------
+Ex5: Create a magzine using css and html 
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Magazine</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f5f5f5;
+    }
+
+    .magazine {
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .left-section {
+      width: 50%;
+      padding: 20px;
+      margin: 10px;
+      background-color: white;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      border-radius: 1px;
+    }
+
+    .right-section {
+      width: 50%;
+      padding: 20px;
+      margin: 10px;
+      background-color: white;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      border-radius: 2px;
+    }
+
+    .section img {
+      width: 100%;
+      border-radius: 5px;
+    }
+
+    .section h2 {
+      font-size: 24px;
+      margin-top: 10px;
+    }
+
+    .section p {
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="magazine">
+    <div class="left-section">
+      <img src="/img/FirstM.jpg" alt="Image 1">
+      <h2>Forbes India Magazine</h2>
+      <p>Forbes India Magazine is a fortnightly magazine which is a great source of information for news and financial updates.<br>
+         This business-focused magazine publishes articles <br>related to finances, economics, investing and marketing. <br>Forbes Magazine is also well known for its lists and rankings of the richest people
+         <br> and companies in America, such as Forbes 400.
+         The great magzine in 2020
+         
+         <div class="left-section">
+            <img src="/img/Magzine4.jpg" alt="Image 1">
+          </div>
+      </p>
+    </div>
+
+    <div class="right-section">
+      <div class="section">
+        <img src="/img/secondM.jpg" alt="Image 2">
+        <h2> Filmfare Magazine :</h2>
+        <p>Filmfare Magazine was first issued on 7 March 1952  in english-language,<br>
+             Filmfare is one of the most popular entertainment magazines in India. <br>Since 1954, as India's No. 1 entertainment magazine, 
+             <br>Filmfare has through the years, turned from a monthly into a fortnightly magazine,<br>
+              launched an edition devoted to the Southern film industry and gained a readership of more than 2 million fans!</p>
+      </div>
+      <div class="section">
+        <img src="/img/ThirdM.jpg" alt="Image 3">
+        <h2>Competition Success Review </h2>
+        <p>Competition Success Review Magazine is an immensely popular magazine 
+            meant for students preparing for competitive examinations in different 
+            areas often abbreviated as CSR, which is a general knowledge Indian magazine. 
+            CSR is a monthly magazine. Its content includes general knowledge trivia with a 
+            focus on Indian current events, tips for college interviews, Interview with IAS toppers, 
+            Interview and GD tips and sample question papers for different competitive examinations.
+        </p>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
+
+
+
