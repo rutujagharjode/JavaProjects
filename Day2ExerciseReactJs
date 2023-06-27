@@ -1,0 +1,76 @@
+Ex1
+problem statement: Write a program to store product Manufacturers(Sony,Airtel,Jio,Nokia,Samsung) in an array
+and display the data of an array with for loop.
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Product Manufacturers</title>
+</head>
+<body>
+    <h1>Product Manufacturers</h1>
+
+    <script>
+        // Array to store product manufacturers
+        var manufacturers = ["Sony", "Airtel", "Jio", "Nokia", "Samsung"];
+
+        // Display the data using a for loop
+        document.write("<ul>");
+        for (var i = 0; i < manufacturers.length; i++) {
+            document.write("<li>" + manufacturers[i] + "</li>");
+        }
+        document.write("</ul>");
+    </script>
+</body>
+</html>
+---------------------------------------
+Ex2
+problem statement:diplay the table of any number in the below format
+2*1=2
+2*2=4
+2*3=6
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Multiplication Table</title>
+</head>
+<body>
+    <h1>Multiplication Table of 2</h1>
+
+    <script>
+        var number = 2;
+
+        for (var i = 1; i <= 10; i++) {
+            var result = number * i;
+            document.write(number + "*" + i + "=" + result + "<br>");
+        }
+    </script>
+</body>
+</html>
+-----------------------------
+Ex3
+problem statement:
+3.Write a program to display the welcome message based on gender input
+e.g. if the gender input is male. then you get a message as Good afternoon Sir or if input is female then Good afternoon madam
+can you string function .toLowerCase()
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Welcome Message</title>
+</head>
+<body>
+    <h1>Welcome Message</h1>
+
+    <script>
+        var gender = prompt("Please enter your gender (Male/Female):").toLowerCase();
+
+        if (gender === "male") {
+            document.write("Good afternoon, Sir!");
+        } else if (gender === "female") {
+            document.write("Good afternoon, Madam!");
+        } else {
+            document.write("Gender not specified or invalid input.");
+        }
+    </script>
+</body>
+</html>
