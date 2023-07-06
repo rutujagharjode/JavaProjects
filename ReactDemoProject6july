@@ -1,0 +1,114 @@
+//App.js file 
+
+import React from 'react';
+import logo from './logo.svg';
+import './App.css';
+
+function App() {
+  return (
+    <div className="container">
+      <div className="left-section">
+        <img className="logo-image" src={logo} alt="Logo" />
+      </div>
+      <div className="right-section">
+        <div className="content-section">
+          <h1>Artiart DEER Spill Proof Travel Cup With Flip Over Lid - 2.7</h1>
+          <p>Artiart</p>
+        </div>
+        <div className="content-section">
+          <h1>48 GloCoins</h1>
+        </div>
+        <div className="content-section">
+          <button className="add-to-cart-btn">Add to Cart</button>
+          <button className="wishlist-btn">Wishlist</button>
+        </div>
+        <nav class="navbar navbar-inverse navbar-static-top">
+          <div class="container">
+            <div class="navbar-header">
+              <button
+                type="button"
+                class="navbar-toggle collapsed"
+                data-toggle="collapse"
+                data-target="#navbar"
+                aria-expanded="false"
+                aria-controls="navbar"
+              >
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+            </div>
+            <div id="navbar" class="navbar-collapse collapse">
+              <div className="content-section navigation-bar">
+                <a href="#description" class="nav-link">Description</a>
+                <a href="#specification" class="nav-link">Specification</a>
+                <a href="#shipping" class="nav-link">Shipping</a>
+              </div>
+            </div>
+          </div>
+        </nav>
+      </div>
+    </div>
+  );
+}
+
+export default App;
+===========================
+//APP.css file
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+}
+
+.container {
+  display: flex;
+  height: 100vh;
+}
+
+.left-section {
+  flex: 1;
+  background-color: #f2f2f2;
+  padding: 20px;
+}
+
+.logo-image {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+}
+
+.right-section {
+  flex: 1;
+  background-color: #fff;
+  padding: 20px;
+}
+
+.content-section {
+  margin-bottom: 20px;
+}
+
+.add-to-cart-btn {
+  background-color: orange;
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 1px;
+  cursor: pointer;
+  margin-right: 10px;
+}
+
+.wishlist-btn {
+  background-color: #fff;
+  color: black;
+  padding: 10px 20px;
+  border: 1px solid #f2f2f2;
+  border-radius: 3px;
+  cursor: pointer;
+}
