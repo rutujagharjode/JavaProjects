@@ -1,196 +1,145 @@
+homepage.tsx
 
 import React from 'react';
+import './Homepage.css';
+import github from '../assets/github_new.webp';
+
+const Homepage: React.FC<{}> = () => {
+  return (
+    <div>
+      <div className="maincont">
+        <div className="thumbnail">
+          <img src={github} alt="GitHub Logo" />
+        </div>
+        <div className="captions">
+          <h1>Welcome to the GitHub Search Platform :)</h1>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Homepage;
+============
+navbar.tsx
+import React from 'react';
 import { Link } from 'react-router-dom';
-import './Navbar.css';
-import logo from '../assets/logo.png'; // Adjust the path based on your folder structure and logo file name
+import './Homepage.css';
+import logo from '../assets/github_new.webp';
 
 const Navbar: React.FC<{}> = () => {
   return (
     <div className="navbar">
-      <div className="logo">
+      <div className="logo-container">
         <Link to="/">
           <img src={logo} alt="Logo" />
+          Logo
         </Link>
       </div>
-      <div className="tabs">
-        <Link to="/" className="tab">Home</Link>
-        <Link to="/search" className="tab">Search</Link>
+      <div className="links-container">
+        <Link to="/" className="links">
+          Home
+        </Link>
+        <Link to="/search" className="links">
+          Search
+        </Link>
       </div>
     </div>
   );
 };
 
 export default Navbar;
-===========
-.navbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background-color: #f0f0f0;
-  padding: 10px;
-}
-
-.logo a {
-  font-weight: bold;
-  text-decoration: none;
-  color: #333;
-}
-
-.tabs .tab {
-  margin-left: 10px;
-  text-decoration: none;
-  color: #333;
-  transition: color 0.3s;
-}
-
-.tabs .tab:hover {
-  color: #ff0000;
-}
------------------------------
-
-
-HomePage.css
-
-import React from 'react'
-import './Homepage.css'
-import github from '../assests/github_new.webp'
-const Homepage: React.FC<{}> = () => {
-  return (
-    <div>
-        <div className="maincont">
-          <div className="thumbnail">
-            <img src={github} />
-
-          </div>
-          <div className="captions">
-            <h1>Welcome to the Git hub Search Platform :)</h1>
-          </div>
-        </div>
-    </div>
-  )
-}
-
-export default Homepage
-=========================
-navbar.tsx
-import React from 'react'
-import './Homepage.css';
-
-const Navbar: React.FC<{}> = () => {
-  return (
-    <div>
-      {/* Write your code here to create a navbar with Logo and two tabs:
-      1- Home
-      2- Search
-      Implement the concept of react routing as well */}
-    </div>
-  )
-}
-
-export default Navbar
---------------------------
-
+=======
 homepage.css
-.maincont{
-    display: inline-block;
-    height: 100%;
+.maincont {
+  display: inline-block;
+  height: 100%;
 }
 
-.thumbnail{
+.thumbnail {
+  display: block;
+  filter: blur(2px);
+  height: 100%;
+  width: 100%;
+  margin-top: 30px;
+}
+
+.captions {
+  display: block;
+  width: auto;
+  position: relative;
+  top: -400px;
+  font-size: 20px;
+  color: white;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.85), transparent);
+  font-weight: 900;
+  font-family: monospace;
+}
+
+@media only screen and (max-width: 400px) {
+  .maincont {
+    display: block;
+    height: 100%;
+    overflow-x: hidden;
+  }
+
+  .thumbnail img {
     display: block;
     filter: blur(2px);
-    height: 100%;
-    width: 100%;
+    height: 92vh;
+    width: 50vh;
     margin-top: 30px;
+  }
 
-}
-
-.captions{
+  .captions {
     display: block;
     width: auto;
     position: relative;
-    top:-400px;
+    top: -500px;
     font-size: 20px;
-    color: white;
-    background: linear-gradient(to top, rgba(0, 0, 0, 0.85), transparent);
     font-weight: 900;
     font-family: monospace;
+    color: white;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.85), transparent);
+    letter-spacing: 3px;
+  }
+
+  /* Additional CSS for the navbar */
+  .navbar {
+    width: 100%;
+    height: 50px;
+    background: #f7f7f7;
+    border-bottom: 1px solid #555;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+  }
+
+  .logo-container {
+    display: flex;
+    align-items: center;
+  }
+
+  .logo-container img {
+    font-weight: 500;
+    cursor: pointer;
+    width: 40px;
+    margin-right: 10px;
+  }
+
+  .links-container {
+    display: flex;
+  }
+
+  .links a {
+    text-decoration: none;
+    outline: none;
+    color: black;
+    padding: 0 10px;
+  }
+
+  .links a:hover {
+    color: #f53b2e;
+  }
 }
-
-@media only screen and (max-width:400px){
-   
-    .maincont{
-        display: block;
-        height: 100%;
-        overflow-x: hidden;
-    }
-    
-    .thumbnail img {
-        display: block;
-        filter: blur(2px);
-        height: 92vh;
-        width:50vh;
-        margin-top: 30px;
-    
-    }
-    
-    .captions{
-        display: block;
-        width: auto;
-        position: relative;
-        top:-500px;
-        font-size: 20px;
-        font-weight: 900;
-        font-family: monospace;
-        color: white;
-        background: linear-gradient(to top, rgba(0, 0, 0, 0.85), transparent);
-        letter-spacing: 3px;
-    }
-
-    .navbar{
-        width: 60%;
-        height: 50px;
-        background: #f7f7f7;
-        border-bottom: 1px solid #555;
-        display: flex;  
-        align-items: center;
-        justify-content: space-between;
-        
-    
-    }
-    .logo-container{
-        position: absolute;
-        left: -170px;
-    }
-    
-    .logo-container span img{
-        font-weight: 500;
-        cursor: pointer;
-        width: 40px;
-        
-    
-    }
-    
-    
-    .links-container{
-        position: absolute;
-        left: 170px;
-        display: flex;
-        justify-content: flex-end;
-    }
-    
-    .links a{
-        text-decoration: none;
-        outline: none;
-        color: black;
-        padding-left: 50px;
-    }
-    
-    .links a:hover{
-        color: #f53b2e;
-    }
-
-}
-
-
-
