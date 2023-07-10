@@ -1,3 +1,10 @@
+write a code in Search.tsx This file will feature an input box where users can enter a GitHub username to initiate a search for a specific user
+ You are responsible for creating an input box and a search button that will facilitate the search functionality and deliver the desired results.
+serach box background color is pink text box color is white and search button color is red 
+In the Search.tsx file, the username provided as input will be used to invoke the GitHub API, retrieve the search result, and display loacation : ,followers , following  name and picture 
+ Furthermore, it is crucial to handle the negative scenario when the username is not found or does not exist. In such cases, you should display an appropriate error message to notify the user.
+The navigation functionality should work properly on this page as well.
+change a code 
 import React, { useState } from 'react'
 import './Search.css'
 
@@ -38,8 +45,8 @@ const Search: React.FC<{}> = () => {
   }
 }
 
-export default Search
-=============
+export default Search 
+and also change the code for search.css file 
 :root{
     --orange1:#ff9999;
     --orange2:#fd5e53;
