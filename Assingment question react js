@@ -1,87 +1,85 @@
-write a code in Search.tsx This file will feature an input box where users can enter a GitHub username to initiate a search for a specific user
- You are responsible for creating an input box and a search button that will facilitate the search functionality and deliver the desired results.
-serach box background color is pink text box color is white and search button color is red 
-In the Search.tsx file, the username provided as input will be used to invoke the GitHub API, retrieve the search result, and display loacation : ,followers , following  name and picture 
- Furthermore, it is crucial to handle the negative scenario when the username is not found or does not exist. In such cases, you should display an appropriate error message to notify the user.
-The navigation functionality should work properly on this page as well.
-change a code 
-import React, { useState } from 'react'
-import './Search.css'
 
-const Search: React.FC<{}> = () => {
-  const [loading, setLoading] = useState<boolean>(false)
-  const [url, setUrl] = useState<string>('')
-  const [reposlink, setReposLink] = useState<string>('')
+use same code to implement ImplementationDetails:1.Fetchthedetailsoftheteamfrom:https://jsonplaceholder.typicode.com/users2.RenderthecardswhichwilldisplaytheName,Username,andEmail.3.IncludetheSearchbarandimplementtheSearchFunctionality.Thefiltershouldworkastheusertypesinthesearchbox.import React, { useState, useEffect } from "react";
+import { Button, Card, CardContent, CardHeader, Container, Grid, Typography, FormControl, TextField, InputAdornment } from '@mui/material'
+import Navbar from '../../Components/NavBar/Navbar'
+import styles from './OrganizationList.module.css'
+import axios from 'axios'
+import { Search } from "@mui/icons-material";
 
-  type URLcreator = (e: any) => void
+const url = 'https://jsonplaceholder.typicode.com/users';
 
-  const urlCreator: URLcreator = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const username = e.target.value
-    setUrl('https://api.github.com/users/' + username)
-    setReposLink('https://github.com/' + username + '?tab=repositories')
-  }
-  
-  const getUserData: any = async () => {
-    setLoading(true)
-    // Using urlCreator method, write your code here to execute API call using axios and populate the response 
-    // on the screen 
-    
-  }
-  if (loading) {
-    return <div className='spinner'></div>
-  
-  }
-  // Write your code here to display data on DOM considering:
-  // 1- if username is valid, display all the details of the users.
-  // 2- if username is invalid,display the error on the screen and give option to search again
-  //Don't create a seperate component for the error page, handle it in the same component using conditional rendering concept in react
+export default function OrganizationList() {
+  const [organizationList, setOrganizationList] = useState([]);
+  const [searchQuery, setSearchQuery] = useState('');
 
-  else {
-    return (
-      <>
-       
-      </>
-    )
-  }
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(url);
+        setOrganizationList(response.data);
+      } catch (error) {
+        console.log('Error fetching data:', error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  const filteredOrganizationList = organizationList.filter((organization) => {
+    return organization.name.toLowerCase().includes(searchQuery.toLowerCase());
+  });
+
+  return (
+    <>
+      <Navbar />
+      <Grid container pt={4} justifyContent={'center'} sx={{ textAlign: 'center' }}>
+        <Container>
+          <Grid container justifyContent={'end'} mb={5} px={4}>
+            <FormControl sx={{ width: 300 }}>
+              <TextField
+                variant="outlined"
+                value={searchQuery}
+                onChange={(e) => {
+                  setSearchQuery(e.target.value);
+                }}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <Search />
+                    </InputAdornment>
+                  ),
+                }}
+                label={'Search Name'}
+                placeholder="Search Organization Here"
+              />
+            </FormControl>
+          </Grid>
+          <Grid container spacing={2} rowGap={2}>
+            {filteredOrganizationList.map((organization) => (
+              <Grid item key={organization.id} xs={12} sm={6} md={4}>
+                <Card className={styles.organizationCard}>
+                  <CardHeader title={organization.name} />
+                  <CardContent>
+                    <Typography variant="body2" color="textSecondary">
+                      Email: {organization.email}
+                    </Typography>
+                    <Typography variant="body2" color="textSecondary">
+                      Phone: {organization.phone}
+                    </Typography>
+                  </CardContent>
+                </Card>
+              </Grid>
+            ))}
+          </Grid>
+        </Container>
+      </Grid>
+    </>
+  )
 }
 
-export default Search 
-and also change the code for search.css file 
-:root{
-    --orange1:#ff9999;
-    --orange2:#fd5e53;
-    --orange3:#ffa368;
-    --orange4:#f53b2e;
-    
+ChatGPT
+!
+Too many requests in 1 hour. Try again later.
 
-}
-body{
-    background-color: var(--orange3);
-    overflow-x: hidden;
-    overflow-y: hidden;
-}
-
-
-.spinner{
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
-    border: 30px solid black;
-    border-top-color: #ffa368;
-    animation: spin 0.7s linear infinite;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    margin-left: -80px;
-    margin-top: -120px;
-
-
-}
-
-@keyframes spin{
-    to{
-        transform: rotate(360deg);
-    }
-}
 
 
