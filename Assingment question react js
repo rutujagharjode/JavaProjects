@@ -270,3 +270,24 @@ export default function OrganizationList() {
   )
 }
 
+
+.organizationCard {
+  background-color: #f5f5f5;
+  border-radius: 8px;
+  padding: 16px;
+}
+
+.organizationCard .MuiCardHeader-root {
+  background-color: #ffffff;
+  padding: 8px 16px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.organizationCard .MuiCardContent-root {
+  padding: 16px 0;
+}
+
+.organizationCard .MuiTypography-root {
+  margin-bottom: 8px;
+}
+
