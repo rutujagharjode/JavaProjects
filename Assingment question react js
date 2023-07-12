@@ -82,4 +82,98 @@ ChatGPT
 Too many requests in 1 hour. Try again later.
 
 
+import React, { useState, useEffect } from "react";
+import {
+  Button,
+  Card,
+  CardContent,
+  CardHeader,
+  Container,
+  Grid,
+  Typography,
+  FormControl,
+  TextField,
+  InputAdornment
+} from '@mui/material';
+import Navbar from '../../Components/NavBar/Navbar';
+import styles from './OrganizationList.module.css';
+import axios from 'axios';
+import { Search } from "@mui/icons-material";
+
+const url = 'https://jsonplaceholder.typicode.com/users';
+
+export default function OrganizationList() {
+  const [organizationList, setOrganizationList] = useState([]);
+  const [searchQuery, setSearchQuery] = useState('');
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(`${url}/2`); // Fetching details from a different URL (users2)
+        setOrganizationList(response.data);
+      } catch (error) {
+        console.log('Error fetching data:', error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  const filteredOrganizationList = organizationList.filter((organization) => {
+    return (
+      organization.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      organization.username.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      organization.email.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+  });
+
+  return (
+    <>
+      <Navbar />
+      <Grid container pt={4} justifyContent={'center'} sx={{ textAlign: 'center' }}>
+        <Container>
+          <Grid container justifyContent={'end'} mb={5} px={4}>
+            <FormControl sx={{ width: 300 }}>
+              <TextField
+                variant="outlined"
+                value={searchQuery}
+                onChange={(e) => {
+                  setSearchQuery(e.target.value);
+                }}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <Search />
+                    </InputAdornment>
+                  ),
+                }}
+                label={'Search Name, Username, or Email'}
+                placeholder="Search Organization Here"
+              />
+            </FormControl>
+          </Grid>
+          <Grid container spacing={2} rowGap={2}>
+            {filteredOrganizationList.map((organization) => (
+              <Grid item key={organization.id} xs={12} sm={6} md={4}>
+                <Card className={styles.organizationCard}>
+                  <CardHeader title={organization.name} />
+                  <CardContent>
+                    <Typography variant="body2" color="textSecondary">
+                      Username: {organization.username}
+                    </Typography>
+                    <Typography variant="body2" color="textSecondary">
+                      Email: {organization.email}
+                    </Typography>
+                  </CardContent>
+                </Card>
+              </Grid>
+            ))}
+          </Grid>
+        </Container>
+      </Grid>
+    </>
+  )
+}
+
+
 
